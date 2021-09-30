@@ -156,12 +156,18 @@ actions:
 
 success: 
   email: |
-    **NextCloud Admin**<br />
-    **URL**: [Portal](${env.protocol}://${env.domain}/)<br />
-    **User**: admin<br />
+    **NextCloud Admin**
+
+    **URL**: [Portal](${env.protocol}://${env.domain}/)
+
+    **User**: admin
+
     **Password**: ${globals.ADMIN_PASS}
   text: |
     **NextCloud Admin**
+
     **URL**: [Portal](${env.protocol}://${env.domain}/)
+
     **User**: admin
+    
     **Password**: ${globals.ADMIN_PASS}
