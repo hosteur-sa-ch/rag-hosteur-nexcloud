@@ -8,7 +8,10 @@ baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/ma
 
 mixins:
  - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
- 
+
+globals:
+  nextcloudroot: /var/www/webroot
+
 nodes:
   - cloudlets: 16
     count: 1
@@ -19,12 +22,11 @@ nodes:
 onInstall:
   - nexcloud-onlyoffice-install
 
-
-action:
+actions:
   nexcloud-onlyoffice-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}/ROOT
       php occ app:install onlyoffice
       php occ config:system:set onlyoffice DocumentServerUrl --value="/ds-vpath/" --type=string
-      php occ config:system:set onlyoffice DocumentServerInternalUrl --value="http://onlyoffice/" --type=string
+      php occ config:system:set onlyoffice DocumentServerInternalUrl --value="${nodes.onlyoffice.url}/" --type=string
       php occ config:system:set onlyoffice StorageUrl --value="${env.protocol}://${env.domain}/" --type=string

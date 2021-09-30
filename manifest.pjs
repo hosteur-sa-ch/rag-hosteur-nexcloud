@@ -61,9 +61,6 @@ nodes:
     nodeType: apache2
     engine: php7.4
     displayName: "Apps"
-    links:
-      sourceNodeGroup: "onlyoffice"
-      alias: "onlyoffice"
   - cloudlets: 24
     count: 1
     nodeType: postgres13
@@ -150,6 +147,7 @@ actions:
 
   nexcloud-onlyoffice-install:
     - install: ${globals.PATH}/addons/onlyoffice.jps
+    https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/addons/onlyoffice.jps
 
   nexcloud-fulltextsearch-install:
     - install: ${globals.PATH}/addons/fulltextsearch.jps
