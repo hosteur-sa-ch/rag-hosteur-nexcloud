@@ -135,7 +135,7 @@ actions:
       php occ app:install ransomware_protection
       php occ app:install bruteforcesettings
 
-  nexcloud-advfeat-install
+  nexcloud-advfeat-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}/ROOT
       php occ app:install calendar
