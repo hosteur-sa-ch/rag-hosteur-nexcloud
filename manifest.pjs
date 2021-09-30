@@ -41,6 +41,11 @@ settings:
       placeholder: Your Hosteur S3 SK
       required: true
     - type: checkbox
+      caption: Install Base Applications Tools
+      name: advfeat
+      value: true
+      disabled: false
+    - type: checkbox
       caption: Install FullTextSearch Elastic Search instance
       name: elastic
       value: true
@@ -57,24 +62,20 @@ onBeforeInstall: /scripts/nodedefine.js?_r=${fn.random}
 nodes: definedInOnBeforeInstall
 
 onInstall:
-  - log: Deploying sources
   - nextcloud-src-install
   - restartNodes:
     - nodeGroup: [cp]
-  - log: Installing NextCloud
   - nexcloud-db-install
-  - log: Configuring NextCloud
   - nexcloud-storage-install
   - restartNodes:
     - nodeGroup: [cp]
-  - log: Installing Apps
   - nexcloud-app-install
   - if (${settings.onlyoff:true}):
-    - log: Adding OnlyOffice
     - nexcloud-onlyoffice-install
   - if (${settings.elastic:true}):
-    - log: Adding FullTextSearch
     - nexcloud-fulltextsearch-install
+  - if (${settings.advfeat:true}):
+    - nexcloud-advfeat-install
   
 
 actions:
@@ -132,6 +133,14 @@ actions:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}/ROOT
       php occ app:install ransomware_protection
+      php occ app:install bruteforcesettings
+
+  nexcloud-advfeat-install
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}/ROOT
+      php occ app:install calendar
+      php occ app:install contacts
+      php occ app:install deck
 
   nexcloud-onlyoffice-install:
     - install: ${globals.PATH}/addons/onlyoffice.jps
