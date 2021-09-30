@@ -19,7 +19,7 @@ description:
   short: Nextcloud with Hosteur Bucket Storage.
 
 mixins:
- - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yam
+ - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
 
 
 globals:
@@ -41,13 +41,13 @@ settings:
       caption: Hosteur S3 Secret Key
       placeholder: Your Hosteur S3 SK
       required: true
-  - caption: Install FullTextSearch Elastic Search instance
-      type: checkbox
+    - type: checkbox
+      caption: Install FullTextSearch Elastic Search instance
       name: elastic
       value: true
       disabled: false
-  - caption: Install OnlyOffice Document Service
-      type: checkbox
+    - type: checkbox
+      caption: Install OnlyOffice Document Service
       name: onlyoff
       value: true
       disabled: false
