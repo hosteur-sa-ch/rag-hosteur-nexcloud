@@ -52,23 +52,10 @@ settings:
       value: true
       disabled: false
              
+onBeforeInstall: /scripts/nodedefine.js?_r=${fn.random}
 
 
-nodes:
-  - cloudlets: 16
-    count: 1
-    nodeGroup: cp
-    nodeType: apache2
-    engine: php7.4
-    displayName: "Apps"
-  - cloudlets: 24
-    count: 1
-    nodeType: postgres13
-  - cloudlets: 8
-    nodeType: redis
-    count: 1
-    nodeGroup: nosqldb
-    displayName: "Session"
+nodes: definedInOnBeforeInstall
 
 onInstall:
   - log: Deploying sources

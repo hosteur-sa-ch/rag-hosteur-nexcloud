@@ -12,13 +12,6 @@ mixins:
 globals:
   nextcloudroot: /var/www/webroot
 
-nodes:
-  - cloudlets: 16
-    count: 1
-    image: onlyoffice/documentserver:${globals.DOCSRV_RV}
-    nodeGroup: onlyoffice
-    displayName: "Document Service"
-
 onInstall:
   - nexcloud-onlyoffice-install
 

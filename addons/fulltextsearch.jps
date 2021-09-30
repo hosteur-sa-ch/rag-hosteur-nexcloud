@@ -11,13 +11,6 @@ mixins:
 globals:
   nextcloudroot: /var/www/webroot
 
-nodes:
-  - cloudlets: 16
-    count: 1
-    image: elasticsearch:${globals.ELS_RV}
-    nodeGroup: elastic
-    displayName: "Search Service"
-
 onInstall:
   - nexcloud-fulltextsearch-install
 
