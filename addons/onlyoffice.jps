@@ -28,4 +28,3 @@ action:
       php occ config:system:set onlyoffice DocumentServerUrl --value="/ds-vpath/" --type=string
       php occ config:system:set onlyoffice DocumentServerInternalUrl --value="http://onlyoffice/" --type=string
       php occ config:system:set onlyoffice StorageUrl --value="${env.protocol}://${env.domain}/" --type=string
-      php occ app:install ransomware_protection

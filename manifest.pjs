@@ -85,7 +85,8 @@ onInstall:
   - if ('${settings.onlyoff:true}):
     - log: Adding OnlyOffice
     - nexcloud-onlyoffice-install
-  - if ('${settings.onlyoff:true}):
+  - if ('${settings.elasticok
+  :true}):
     - log: Adding FullTextSearch
     - nexcloud-fulltextsearch-install
   
@@ -130,7 +131,6 @@ actions:
       php occ config:system:set redis timeout --value="1.5" --type=float
       php occ config:system:set memcache.distributed --value="\\OC\\Memcache\\Redis" --type=string
       php occ config:system:set trusted_domains 0 --value="${env.domain}" --type=string
-      php occ config:system:set trusted_domains 1 --value="${nodes.onlyoffice.master.name}-${env.domain}" --type=string
       php occ config:system:set logtimezone --value="Europe/Paris" --type=string
       php occ config:system:set log_type --value="owncloud" --type=string
       php occ config:system:set logfile --value="/var/log/httpd/nextcloud.log" --type=string
