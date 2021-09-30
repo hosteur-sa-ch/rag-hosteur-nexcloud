@@ -135,6 +135,8 @@ actions:
       php occ config:system:set logfile --value="/var/log/httpd/nextcloud.log" --type=string
       php occ config:system:set loglevel --value="2" --type=integer
       php occ config:system:set log_rotate_size --value="104857600" --type=integer
+      php occ config:system:set overwriteprotocol --value="https" --type=string
+      php occ config:system:set overwrite.cli.url --value="${env.protocol}://${env.domain}/" --type=string
 
 
   nexcloud-app-install:
@@ -154,12 +156,12 @@ actions:
 
 success: 
   email: |
-    **NextCloud Admin**
-    **URL**: [${env.protocol}://${env.domain}/](${env.protocol}://${env.domain}/)
-    **User**: admin
+    **NextCloud Admin**<br />
+    **URL**: [${env.protocol}://${env.domain}/](${env.protocol}://${env.domain}/)<br />
+    **User**: admin<br />
     **Password**: ${globals.ADMIN_PASS}
   text: |
-    **NextCloud Admin**
-    **URL**: [${env.protocol}://${env.domain}/](${env.protocol}://${env.domain}/)
-    **User**: admin
+    **NextCloud Admin**<br />
+    **URL**: [${env.protocol}://${env.domain}/](${env.protocol}://${env.domain}/)<br />
+    **User**: admin<br />
     **Password**: ${globals.ADMIN_PASS}
