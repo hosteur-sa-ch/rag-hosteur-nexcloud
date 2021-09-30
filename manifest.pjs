@@ -124,6 +124,8 @@ actions:
       php occ config:system:set log_rotate_size --value="104857600" --type=integer
       php occ config:system:set overwriteprotocol --value="https" --type=string
       php occ config:system:set overwrite.cli.url --value="${env.protocol}://${env.domain}/" --type=string
+      export OC_PASS=${globals.ADMIN_PASS}
+      php occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admins"
 
 
   nexcloud-app-install:
@@ -143,7 +145,7 @@ success:
 
     **URL**: [Portal](${env.protocol}://${env.domain}/)
 
-    **User**: admin
+    **User**: nxtadmin
 
     **Password**: ${globals.ADMIN_PASS}
   text: |
@@ -151,6 +153,6 @@ success:
 
     **URL**: [Portal](${env.protocol}://${env.domain}/)
 
-    **User**: admin
+    **User**: nxtadmin
 
     **Password**: ${globals.ADMIN_PASS}
