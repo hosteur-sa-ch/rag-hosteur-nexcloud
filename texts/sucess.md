@@ -1,1 +1,1 @@
-Installation ok
+Installation Completed
