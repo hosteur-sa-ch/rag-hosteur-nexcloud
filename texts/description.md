@@ -1,6 +1,8 @@
 Nextcloud with Hosteur Bucket Storage.
 
->If you haven't Hosteur Bucket Account: Go to [Hosteur](https://www.hosteur.com/business/stockage/bucket) to create your account.
+No Hosteur Bucket Account yet ...
+
+Go to [Hosteur](https://www.hosteur.com/business/stockage/bucket) to create your account.
 
 Default Features :
  - Full Text Search (Elastic Search)

@@ -85,8 +85,7 @@ onInstall:
   - if ('${settings.onlyoff:true}):
     - log: Adding OnlyOffice
     - nexcloud-onlyoffice-install
-  - if ('${settings.elasticok
-  :true}):
+  - if ('${settings.elastic:true}):
     - log: Adding FullTextSearch
     - nexcloud-fulltextsearch-install
   
