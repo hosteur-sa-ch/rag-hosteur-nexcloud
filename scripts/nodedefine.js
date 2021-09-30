@@ -51,6 +51,4 @@ if (${settings.elastic:true}) {
         displayName: "Search Service"
     })
 }
-
-
 return resp;
