@@ -126,7 +126,7 @@ actions:
       php occ config:system:set overwrite.cli.url --value="${env.protocol}://${env.domain}/" --type=string
       export OC_PASS=${globals.ADMIN_PASS}
       php occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admins"
-
+      php occ background:cron
 
   nexcloud-app-install:
     cmd[cp]: |-
