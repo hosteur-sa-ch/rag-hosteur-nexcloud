@@ -16,7 +16,6 @@ categories:
 
 description:
   text: /texts/description.md
-  short: Nextcloud with Hosteur Bucket Storage.
 
 mixins:
  - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
@@ -134,7 +133,6 @@ actions:
 
   nexcloud-onlyoffice-install:
     - install: ${globals.PATH}/addons/onlyoffice.jps
-    https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/addons/onlyoffice.jps
 
   nexcloud-fulltextsearch-install:
     - install: ${globals.PATH}/addons/fulltextsearch.jps

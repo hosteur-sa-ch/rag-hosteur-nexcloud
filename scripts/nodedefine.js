@@ -31,7 +31,7 @@ var resp = {
 if (${settings.onlyoff:true}) {
     resp.nodes.push({
         image: "onlyoffice/documentserver",
-        tag: ${globals.DOCSRV_RV},
+        tag: "6.4.1",
         count: 1,
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
@@ -44,7 +44,7 @@ if (${settings.onlyoff:true}) {
 if (${settings.onlyoff:true}) {
     resp.nodes.push({
         image: "elasticsearch",
-        tag: ${globals.ELS_RV},
+        tag: "6.8.18",
         count: 1,
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
