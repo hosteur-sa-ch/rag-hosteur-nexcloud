@@ -9,7 +9,4 @@ Default Features :
  - Document Online edition (OnlyOffice)
  - Anti Crypto Locker filter (Native)
 
-Current Version :
-- Nexcloud 22.1.1
-- OnlyOffice DocumentServer 6.4.1
-- ElasticSearch 6.8.18
+>Current Version : Nexcloud 22.1.1, OnlyOffice DocumentServer 6.4.1, ElasticSearch 6.8.18
