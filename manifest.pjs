@@ -52,8 +52,7 @@ nodes:
       alias: "onlyoffice"
   - cloudlets: 24
     count: 1
-    nodeType: mysql5
-    displayName: "Database"
+    nodeType: postgres13
   - cloudlets: 8
     nodeType: redis
     count: 1
@@ -106,20 +105,20 @@ actions:
   nexcloud-db-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}/ROOT
-      php occ maintenance:install --database "mysql" --database-name "nextcloud" --database-user "nxtclduser" --database-host ${nodes.mysql5.address} --database-pass ${globals.DB_ADMIN_PASS} --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
+      php occ maintenance:install --database "pgsql" --database-name "nextcloud" --database-user "webadmin" --database-host ${nodes.postgres13.address} --database-pass ${nodes.postgres13.password}  --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
       
   nexcloud-storage-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}/ROOT
       php occ config:system:set objectstore arguments bucket --value="${globals.BUCKETNAME}" --type=string
-      php occ config:system:set objectstore arguments autocreate --value="yes" --type=boolean
+      php occ config:system:set objectstore arguments autocreate --value="true" --type=boolean
       php occ config:system:set objectstore arguments key --value="${settings.s3ak}" --type=string
       php occ config:system:set objectstore arguments secret --value="${settings.s3sk}" --type=string
       php occ config:system:set objectstore arguments hostname --value="s3.hosteur.io" --type=string
       php occ config:system:set objectstore arguments port --value="443" --type=integer
-      php occ config:system:set objectstore arguments use_ssl --value="yes" --type=boolean
+      php occ config:system:set objectstore arguments use_ssl --value="true" --type=boolean
       php occ config:system:set objectstore arguments region --value="defaultRegion" --type=string
-      php occ config:system:set objectstore arguments verify_ssl --value="no" --type=boolean
+      php occ config:system:set objectstore arguments verify_ssl --value="false" --type=boolean
       php occ config:system:set objectstore class --value="\\OC\\Files\\ObjectStore\\S3" --type=string
       php occ config:system:delete datadirectory
       php occ config:system:set redis host --value="${nodes.nosqldb.master.address}" --type=string
@@ -169,5 +168,5 @@ success:
     **URL**: [Portal](${env.protocol}://${env.domain}/)
 
     **User**: admin
-    
+
     **Password**: ${globals.ADMIN_PASS}
