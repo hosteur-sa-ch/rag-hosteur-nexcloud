@@ -51,7 +51,7 @@ settings:
       value: true
       disabled: false
              
-onBeforeInstall: /scripts/nodedefine.js?_r=${fn.random}&ELS_RV=${globals.ELS_RV}&DOCSRV_RV=${globals.DOCSRV_RV}
+onBeforeInstall: /scripts/nodedefine.js?_r=${fn.random}
 
 
 nodes: definedInOnBeforeInstall
