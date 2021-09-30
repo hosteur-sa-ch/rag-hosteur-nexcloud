@@ -1,3 +1,9 @@
+function get(name){
+    if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+       return decodeURIComponent(name[1]);
+ }
+
+
 var resp = {
     result: 0,
     ssl: !!jelastic.billing.account.GetQuotas('environment.jelasticssl.enabled').array[0].value,
@@ -30,7 +36,7 @@ var resp = {
 
 if (${settings.onlyoff:true}) {
     resp.nodes.push({
-        image: "onlyoffice/documentserver:6.4.1",
+        image: "onlyoffice/documentserver:"+get(DOCSRV_RV),
         count: 1,
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
@@ -42,7 +48,7 @@ if (${settings.onlyoff:true}) {
 
 if (${settings.elastic:true}) {
     resp.nodes.push({
-        image: "elasticsearch:6.8.18",
+        image: "elasticsearch:"+get(ELS_RV),
         count: 1,
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
