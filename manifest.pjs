@@ -2,7 +2,7 @@ version: '1.0.0'
 appVersion: latest
 type: install
 id: hstnextcloud
-name: Hosteur NextCloud (Bucket Support)
+name: Hosteur NextCloud (Bucket Storage)
 baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
 logo: /images/logo.png
 homepage: http://www.nextcloud.com/
@@ -14,14 +14,14 @@ categories:
 
 description:
   text: /texts/description.md
-  short: Open-source Cloud Drive, Nextcloud with S3 Bucket support
+  short: Nextcloud with Hosteur Bucket Storage
 
 globals:
   nextcloudroot: /var/www/webroot
   DB_ADMIN_PASS: "${fn.password}"
   ADMIN_PASS: "${fn.password}"
   BUCKETNAME: "NXTCLDDATA-${fn.random}"
-  NEXTCLOUD_RV: "22.1.1"
+  NEXTCLOUD_RV: "v22.1.1"
   ELS_RV: "6.8.18"
   DOCSRV_RV: "6.4.1"
 
@@ -64,57 +64,51 @@ nodes:
     image: elasticsearch:${globals.ELS_RV}
 
 onInstall:
-  - pg-setup
-  - nextcloud-app-install
+  - nextcloud-src-install
+  - restartNodes:
+    - nodeGroup: [cp]
   - nexcloud-db-install
   - nexcloud-storage-install
   - restartNodes:
     - nodeGroup: [cp]
 
 actions:
-  pg-setup:
-    nodeGroup: sqldb
-    loginCredentials:
-      user: root
-      password: "${nodes.sqldb.password}"
-    newDatabaseName: nextcloud
-    newDatabaseUser:
-      name: nxtclduser
-      password: "${globals.DB_ADMIN_PASS}"  
-  nextcloud-app-install:
+  nextcloud-src-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}
       git clone https://github.com/nextcloud/server.git
+      rm -rf ${globals.nextcloudroot}/ROOT
       mv ${globals.nextcloudroot}/server ${globals.nextcloudroot}/ROOT
       cd ${globals.nextcloudroot}/ROOT
       git checkout ${globals.NEXTCLOUD_RV}
-      chown -R apache.apache ${globals.laravelroot}/ROOT
+      chown -R apache.apache ${globals.nextcloudroot}/ROOT
+      git submodule update --init
     user: root
 
   nexcloud-db-install:
     cmd[cp]:
       cd ${globals.nextcloudroot}/ROOT
-      php occ maintenance:install --database "pgsql" --database-name "nextcloud"  --database-user "nxtclduser" --database-host ${nodes.sqldb.master.address}  --database-pass ${globals.DB_ADMIN_PASS}² --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
+      php occ maintenance:install --database "pgsql" --database-name "nextcloud"  --database-user "root" --database-host ${nodes.sqldb.master.address}  --database-pass ${nodes.sqldb.password} --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
       
   nexcloud-storage-install:
     cmd[cp]:
       cd ${globals.nextcloudroot}/ROOT
-      php occ config:app:set objectstore class --value="\\OC\\Files\\ObjectStore\\S3" --type=string
-      php occ config:app:set objectstore arguments bucket --value="${globals.BUCKETNAME}" --type=string
-      php occ config:app:set objectstore arguments autocreate --value="yes" --type=boolean
-      php occ config:app:set objectstore arguments key --value="${settings.s3ak}" --type=string
-      php occ config:app:set objectstore arguments secret --value="${settings.s3sk}" --type=string
-      php occ config:app:set objectstore arguments hostname --value="s3.hosteur.io" --type=string
-      php occ config:app:set objectstore arguments port --value="443" --type=integer
-      php occ config:app:set objectstore arguments use_ssl --value="yes" --type=boolean
-      php occ config:app:set objectstore arguments region --value="defaultRegion" --type=string
-      php occ config:app:set objectstore arguments verify_ssl --value="no" --type=boolean
-      php occ config:app:set memcache.distributed --value="\\OC\\Memcache\\Redis" --type=string
-      php occ config:app:set redis host --value="${nodes.nosqldb.master.address}" --type=string
-      php occ config:app:set redis port --value="6379" --type=integer
-      php occ config:app:set redis dbindex --value="0" --type=integer
-      php occ config:app:set redis password --value="${nodes.nosqldb.master.password}" --type=string
-      php occ config:app:set redis timeout --value="1.5" --type=float
+      php occ config:system:set objectstore class --value="\\OC\\Files\\ObjectStore\\S3" --type=string
+      php occ config:system:set objectstore arguments bucket --value="${globals.BUCKETNAME}" --type=string
+      php occ config:system:set objectstore arguments autocreate --value="yes" --type=boolean
+      php occ config:system:set objectstore arguments key --value="${settings.s3ak}" --type=string
+      php occ config:system:set objectstore arguments secret --value="${settings.s3sk}" --type=string
+      php occ config:system:set objectstore arguments hostname --value="s3.hosteur.io" --type=string
+      php occ config:system:set objectstore arguments port --value="443" --type=integer
+      php occ config:system:set objectstore arguments use_ssl --value="yes" --type=boolean
+      php occ config:system:set objectstore arguments region --value="defaultRegion" --type=string
+      php occ config:system:set objectstore arguments verify_ssl --value="no" --type=boolean
+      php occ config:system:set memcache.distributed --value="\\OC\\Memcache\\Redis" --type=string
+      php occ config:system:set redis host --value="${nodes.nosqldb.master.address}" --type=string
+      php occ config:system:set redis port --value="6379" --type=integer
+      php occ config:system:set redis dbindex --value="0" --type=integer
+      php occ config:system:set redis password --value="${nodes.nosqldb.master.password}" --type=string
+      php occ config:system:set redis timeout --value="1.5" --type=float
 
 success: 
   email: true
