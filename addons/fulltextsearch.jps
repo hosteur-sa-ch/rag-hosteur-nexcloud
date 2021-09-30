@@ -6,7 +6,7 @@ logo: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/
 baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
 
 mixins:
- - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yam
+ - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
 
 nodes:
   - cloudlets: 16
