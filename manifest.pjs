@@ -1,0 +1,129 @@
+version: '1.0.0'
+appVersion: latest
+type: install
+id: hstnextcloud
+name: Hosteur NextCloud (Bucket Support)
+baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
+logo: /images/logo.png
+homepage: http://www.nextcloud.com/
+
+categories:
+  - apps/file-management
+  - apps/popular
+  - apps/file-manager
+
+description:
+  text: /texts/description.md
+  short: Open-source Cloud Drive, Nextcloud with S3 Bucket support
+
+globals:
+  nextcloudroot: /var/www/webroot
+  DB_ADMIN_PASS: "${fn.password}"
+  ADMIN_PASS: "${fn.password}"
+  BUCKETNAME: "NXTCLDDATA-${fn.random}"
+  NEXTCLOUD_RV: "22.1.1"
+  ELS_RV: "6.8.18"
+  DOCSRV_RV: "6.4.1"
+
+settings:
+  fields:
+    - type: string
+      name: s3ak
+      caption: Hosteur S3 Account Key
+      placeholder: Your Hosteur S3 AK
+      required: true
+    - type: string
+      name: s3sk
+      caption: Hosteur S3 Secret Key
+      placeholder: Your Hosteur S3 SK
+      required: true
+
+nodes:
+  - cloudlets: 4
+    count: 1
+    nodeGroup: bl
+    nodeType: haproxy
+    extip: false
+  - cloudlets: 16
+    count: 1
+    nodeGroup: cp
+    nodeType: apache2
+  - cloudlets: 24
+    count: 1
+    nodeType: postgres12
+    password: ${fn.password}
+  - cloudlets: 8
+    nodeType: redis
+    count: 1
+    nodeGroup: nosqldb    
+  - cloudlets: 16
+    count: 1
+    image: onlyoffice/documentserver:${globals.DOCSRV_RV}
+  - cloudlets: 16
+    count: 1
+    image: elasticsearch:${globals.ELS_RV}
+
+onInstall:
+  - pg-setup
+  - nextcloud-app-install
+  - nexcloud-db-install
+  - nexcloud-storage-install
+  - restartNodes:
+    - nodeGroup: [cp]
+
+actions:
+  pg-setup:
+    nodeGroup: sqldb
+    loginCredentials:
+      user: root
+      password: "${nodes.sqldb.password}"
+    newDatabaseName: nextcloud
+    newDatabaseUser:
+      name: nxtclduser
+      password: "${globals.DB_ADMIN_PASS}"  
+  nextcloud-app-install:
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}
+      git clone https://github.com/nextcloud/server.git
+      mv ${globals.nextcloudroot}/server ${globals.nextcloudroot}/ROOT
+      cd ${globals.nextcloudroot}/ROOT
+      git checkout ${globals.NEXTCLOUD_RV}
+      chown -R apache.apache ${globals.laravelroot}/ROOT
+    user: root
+
+  nexcloud-db-install:
+    cmd[cp]:
+      cd ${globals.nextcloudroot}/ROOT
+      php occ maintenance:install --database "pgsql" --database-name "nextcloud"  --database-user "nxtclduser" --database-host ${nodes.sqldb.master.address}  --database-pass ${globals.DB_ADMIN_PASS}² --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
+      
+  nexcloud-storage-install:
+    cmd[cp]:
+      cd ${globals.nextcloudroot}/ROOT
+      php occ config:app:set objectstore class --value="\\OC\\Files\\ObjectStore\\S3" --type=string
+      php occ config:app:set objectstore arguments bucket --value="${globals.BUCKETNAME}" --type=string
+      php occ config:app:set objectstore arguments autocreate --value="yes" --type=boolean
+      php occ config:app:set objectstore arguments key --value="${settings.s3ak}" --type=string
+      php occ config:app:set objectstore arguments secret --value="${settings.s3sk}" --type=string
+      php occ config:app:set objectstore arguments hostname --value="s3.hosteur.io" --type=string
+      php occ config:app:set objectstore arguments port --value="443" --type=integer
+      php occ config:app:set objectstore arguments use_ssl --value="yes" --type=boolean
+      php occ config:app:set objectstore arguments region --value="defaultRegion" --type=string
+      php occ config:app:set objectstore arguments verify_ssl --value="no" --type=boolean
+      php occ config:app:set memcache.distributed --value="\\OC\\Memcache\\Redis" --type=string
+      php occ config:app:set redis host --value="${nodes.nosqldb.master.address}" --type=string
+      php occ config:app:set redis port --value="6379" --type=integer
+      php occ config:app:set redis dbindex --value="0" --type=integer
+      php occ config:app:set redis password --value="${nodes.nosqldb.master.password}" --type=string
+      php occ config:app:set redis timeout --value="1.5" --type=float
+
+success: 
+  email: true
+  text: |
+    **NextCloud Admin**
+    **URL**: [${env.protocol}://${env.domain}/](${env.protocol}://${env.domain}/)  
+    **User**: admin
+    **Password**: ${globals.ADMIN_PASS}
+    **PostGres Web Admin**
+    **Admin Panel**: [${nodes.sqldb.master.url}](${nodes.sqldb.master.url})  
+    **User**: webadmin  
+    **Password**: ${nodes.sqldb.password}  
