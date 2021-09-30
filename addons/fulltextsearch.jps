@@ -1,8 +1,8 @@
 jpsType: update
 jpsVersion: '1.0'
-name: OnlyOffice Document Service
-description: Add Online editor multi-user to NextCloud
-logo: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/images/onlyoffice-logo.png
+name: FullTextSearch
+description: Add ElasticSearch FullTextSearch to NextCloud
+logo: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/images/elastic_search-logo.png
 baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
 
 mixins:

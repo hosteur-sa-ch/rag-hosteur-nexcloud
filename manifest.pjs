@@ -74,18 +74,22 @@ nodes:
     displayName: "Session"
 
 onInstall:
+  - log: Deploying sources
   - nextcloud-src-install
   - restartNodes:
     - nodeGroup: [cp]
+  - log: Installing NextCloud
   - nexcloud-db-install
+  - log: Configuring NextCloud
   - nexcloud-storage-install
   - restartNodes:
     - nodeGroup: [cp]
+  - log: Installing Apps
   - nexcloud-app-install
-  - if ('${settings.onlyoff:true}):
+  - if (${settings.onlyoff:true}):
     - log: Adding OnlyOffice
     - nexcloud-onlyoffice-install
-  - if ('${settings.elastic:true}):
+  - if (${settings.elastic:true}):
     - log: Adding FullTextSearch
     - nexcloud-fulltextsearch-install
   
