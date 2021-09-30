@@ -2,9 +2,9 @@ Nextcloud with Hosteur Bucket Storage.
 If you haven't Hosteur Bucket Account: Go to https://www.hosteur.com/business/stockage/bucket to create your account.
 
 Default Features :
- - Fulltextsearch
+ - Full Text Search (Elastic Search)
  - Document Online edition (OnlyOffice)
- - Anti Crypto Locker filter
+ - Anti Crypto Locker filter (Native)
 
 Current Version :
 - Nexcloud 22.1.1
