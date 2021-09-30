@@ -1,0 +1,29 @@
+jpsType: update
+jpsVersion: '1.0'
+name: OnlyOffice Document Service
+description: Add Online editor multi-user to NextCloud
+logo: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/images/onlyoffice-logo.png
+baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
+
+mixins:
+ - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yam
+
+nodes:
+  - cloudlets: 16
+    count: 1
+    image: elasticsearch:${globals.ELS_RV}
+    nodeGroup: elastic
+    displayName: "Search Service"
+
+onInstall:
+  - nexcloud-fulltextsearch-install
+
+action:
+  nexcloud-fulltextsearch-install:
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}/ROOT
+      php occ app:install fulltextsearch
+      php occ config:app:set fulltextsearch search_platform --value="OCA\\FullTextSearch_ElasticSearch\\Platform\\ElasticSearchPlatform" --type=string
+      php occ config:app:set fulltextsearch_elasticsearch elastic_host --value="${nodes.elastic.address}" --type=string
+      php occ config:app:set fulltextsearch_elasticsearch elastic_index --value="nxtcldindex" --type=string
+      php occ config:app:set fulltextsearch_elasticsearch enabled --value="yes" --type=string

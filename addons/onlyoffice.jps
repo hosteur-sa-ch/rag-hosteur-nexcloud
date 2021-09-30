@@ -1,0 +1,31 @@
+jpsType: update
+jpsVersion: '1.0'
+name: OnlyOffice Document Service
+description: Add Online editor multi-user to NextCloud
+logo: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/images/onlyoffice-logo.png
+baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
+
+
+mixins:
+ - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yam
+ 
+nodes:
+  - cloudlets: 16
+    count: 1
+    image: onlyoffice/documentserver:${globals.DOCSRV_RV}
+    nodeGroup: onlyoffice
+    displayName: "Document Service"
+
+onInstall:
+  - nexcloud-onlyoffice-install
+
+
+action:
+  nexcloud-onlyoffice-install:
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}/ROOT
+      php occ app:install onlyoffice
+      php occ config:system:set onlyoffice DocumentServerUrl --value="/ds-vpath/" --type=string
+      php occ config:system:set onlyoffice DocumentServerInternalUrl --value="http://onlyoffice/" --type=string
+      php occ config:system:set onlyoffice StorageUrl --value="${env.protocol}://${env.domain}/" --type=string
+      php occ app:install ransomware_protection

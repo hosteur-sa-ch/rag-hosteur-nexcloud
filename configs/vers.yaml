@@ -1,0 +1,4 @@
+globals:
+  NEXTCLOUD_RV: "v22.1.1"
+  ELS_RV: "6.8.18"
+  DOCSRV_RV: "6.4.1"

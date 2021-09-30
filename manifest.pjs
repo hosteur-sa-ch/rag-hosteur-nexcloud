@@ -18,14 +18,16 @@ description:
   text: /texts/description.md
   short: Nextcloud with Hosteur Bucket Storage.
 
+mixins:
+ - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yam
+
+
 globals:
   nextcloudroot: /var/www/webroot
   DB_ADMIN_PASS: "${fn.password}"
   ADMIN_PASS: "${fn.password}"
   BUCKETNAME: "nxtclddata-${fn.random}"
-  NEXTCLOUD_RV: "v22.1.1"
-  ELS_RV: "6.8.18"
-  DOCSRV_RV: "6.4.1"
+  PATH: ${baseUrl}
 
 settings:
   fields:
@@ -39,6 +41,18 @@ settings:
       caption: Hosteur S3 Secret Key
       placeholder: Your Hosteur S3 SK
       required: true
+  - caption: Install FullTextSearch Elastic Search instance
+      type: checkbox
+      name: elastic
+      value: true
+      disabled: false
+  - caption: Install OnlyOffice Document Service
+      type: checkbox
+      name: onlyoff
+      value: true
+      disabled: false
+             
+
 
 nodes:
   - cloudlets: 16
@@ -58,35 +72,23 @@ nodes:
     count: 1
     nodeGroup: nosqldb
     displayName: "Session"
-  - cloudlets: 16
-    count: 1
-    image: onlyoffice/documentserver:${globals.DOCSRV_RV}
-    nodeGroup: onlyoffice
-    displayName: "Document Service"
-  - cloudlets: 16
-    count: 1
-    image: elasticsearch:${globals.ELS_RV}
-    nodeGroup: elastic
-    displayName: "Search Service"
 
 onInstall:
   - nextcloud-src-install
   - restartNodes:
     - nodeGroup: [cp]
-  - prepareSqlDatabase:
-    - nodeType: mysql5
-      loginCredentials:
-        user: root
-        password: ${nodes.mysql5.password}
-      newDatabaseName: nextcloud
-      newDatabaseUser:
-        name: nxtclduser
-        password: ${globals.DB_ADMIN_PASS}  
   - nexcloud-db-install
   - nexcloud-storage-install
   - restartNodes:
     - nodeGroup: [cp]
   - nexcloud-app-install
+  - if ('${settings.onlyoff:true}):
+    - log: Adding OnlyOffice
+    - nexcloud-onlyoffice-install
+  - if ('${settings.onlyoff:true}):
+    - log: Adding FullTextSearch
+    - nexcloud-fulltextsearch-install
+  
 
 actions:
   nextcloud-src-install:
@@ -141,17 +143,13 @@ actions:
   nexcloud-app-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}/ROOT
-      php occ app:install onlyoffice
-      php occ config:system:set onlyoffice DocumentServerUrl --value="/ds-vpath/" --type=string
-      php occ config:system:set onlyoffice DocumentServerInternalUrl --value="http://onlyoffice/" --type=string
-      php occ config:system:set onlyoffice StorageUrl --value="${env.protocol}://${env.domain}/" --type=string
-      php occ app:install fulltextsearch
-      php occ config:app:set fulltextsearch search_platform --value="OCA\\FullTextSearch_ElasticSearch\\Platform\\ElasticSearchPlatform" --type=string
-      php occ config:app:set fulltextsearch_elasticsearch elastic_host --value="${nodes.elastic.address}" --type=string
-      php occ config:app:set fulltextsearch_elasticsearch elastic_index --value="nxtcldindex" --type=string
-      php occ config:app:set fulltextsearch_elasticsearch enabled --value="yes" --type=string
       php occ app:install ransomware_protection
 
+  nexcloud-onlyoffice-install:
+    - install: ${globals.PATH}/addons/onlyoffice.jps
+
+  nexcloud-fulltextsearch-install:
+    - install: ${globals.PATH}/addons/fulltextsearch.jps
 
 success: 
   email: |
