@@ -6,6 +6,8 @@ name: Hosteur NextCloud (Bucket Storage)
 baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
 logo: /images/logo.png
 homepage: http://www.nextcloud.com/
+ssl: true
+skipNodeEmails: true
 
 categories:
   - apps/file-management
@@ -14,13 +16,13 @@ categories:
 
 description:
   text: /texts/description.md
-  short: Nextcloud with Hosteur Bucket Storage
+  short: Nextcloud with Hosteur Bucket Storage.
 
 globals:
   nextcloudroot: /var/www/webroot
   DB_ADMIN_PASS: "${fn.password}"
   ADMIN_PASS: "${fn.password}"
-  BUCKETNAME: "NXTCLDDATA-${fn.random}"
+  BUCKETNAME: "nxtclddata-${fn.random}"
   NEXTCLOUD_RV: "v22.1.1"
   ELS_RV: "6.8.18"
   DOCSRV_RV: "6.4.1"
@@ -39,38 +41,53 @@ settings:
       required: true
 
 nodes:
-  - cloudlets: 4
-    count: 1
-    nodeGroup: bl
-    nodeType: haproxy
-    extip: false
   - cloudlets: 16
     count: 1
     nodeGroup: cp
     nodeType: apache2
+    engine: php7.4
+    displayName: "Apps"
+    links:
+      sourceNodeGroup: "onlyoffice"
+      alias: "onlyoffice"
   - cloudlets: 24
     count: 1
-    nodeType: postgres12
-    password: ${fn.password}
+    nodeType: mysql5
+    displayName: "Database"
   - cloudlets: 8
     nodeType: redis
     count: 1
-    nodeGroup: nosqldb    
+    nodeGroup: nosqldb
+    displayName: "Session"
   - cloudlets: 16
     count: 1
     image: onlyoffice/documentserver:${globals.DOCSRV_RV}
+    nodeGroup: onlyoffice
+    displayName: "Document Service"
   - cloudlets: 16
     count: 1
     image: elasticsearch:${globals.ELS_RV}
+    nodeGroup: elastic
+    displayName: "Search Service"
 
 onInstall:
   - nextcloud-src-install
   - restartNodes:
     - nodeGroup: [cp]
+  - prepareSqlDatabase:
+    - nodeType: mysql5
+      loginCredentials:
+        user: root
+        password: ${nodes.mysql5.password}
+      newDatabaseName: nextcloud
+      newDatabaseUser:
+        name: nxtclduser
+        password: ${globals.DB_ADMIN_PASS}  
   - nexcloud-db-install
   - nexcloud-storage-install
   - restartNodes:
     - nodeGroup: [cp]
+  - nexcloud-app-install
 
 actions:
   nextcloud-src-install:
@@ -83,17 +100,17 @@ actions:
       git checkout ${globals.NEXTCLOUD_RV}
       chown -R apache.apache ${globals.nextcloudroot}/ROOT
       git submodule update --init
+      wget -O /etc/php.ini https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/ressources/php.ini
     user: root
 
   nexcloud-db-install:
-    cmd[cp]:
+    cmd[cp]: |-
       cd ${globals.nextcloudroot}/ROOT
-      php occ maintenance:install --database "pgsql" --database-name "nextcloud"  --database-user "root" --database-host ${nodes.sqldb.master.address}  --database-pass ${nodes.sqldb.password} --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
+      php occ maintenance:install --database "mysql" --database-name "nextcloud" --database-user "nxtclduser" --database-host ${nodes.mysql5.address} --database-pass ${globals.DB_ADMIN_PASS} --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
       
   nexcloud-storage-install:
-    cmd[cp]:
+    cmd[cp]: |-
       cd ${globals.nextcloudroot}/ROOT
-      php occ config:system:set objectstore class --value="\\OC\\Files\\ObjectStore\\S3" --type=string
       php occ config:system:set objectstore arguments bucket --value="${globals.BUCKETNAME}" --type=string
       php occ config:system:set objectstore arguments autocreate --value="yes" --type=boolean
       php occ config:system:set objectstore arguments key --value="${settings.s3ak}" --type=string
@@ -103,21 +120,46 @@ actions:
       php occ config:system:set objectstore arguments use_ssl --value="yes" --type=boolean
       php occ config:system:set objectstore arguments region --value="defaultRegion" --type=string
       php occ config:system:set objectstore arguments verify_ssl --value="no" --type=boolean
-      php occ config:system:set memcache.distributed --value="\\OC\\Memcache\\Redis" --type=string
+      php occ config:system:set objectstore class --value="\\OC\\Files\\ObjectStore\\S3" --type=string
+      php occ config:system:delete datadirectory
       php occ config:system:set redis host --value="${nodes.nosqldb.master.address}" --type=string
       php occ config:system:set redis port --value="6379" --type=integer
       php occ config:system:set redis dbindex --value="0" --type=integer
       php occ config:system:set redis password --value="${nodes.nosqldb.master.password}" --type=string
       php occ config:system:set redis timeout --value="1.5" --type=float
+      php occ config:system:set memcache.distributed --value="\\OC\\Memcache\\Redis" --type=string
+      php occ config:system:set trusted_domains 0 --value="${env.domain}" --type=string
+      php occ config:system:set trusted_domains 1 --value="${nodes.onlyoffice.master.name}-${env.domain}" --type=string
+      php occ config:system:set logtimezone --value="Europe/Paris" --type=string
+      php occ config:system:set log_type --value="owncloud" --type=string
+      php occ config:system:set logfile --value="/var/log/httpd/nextcloud.log" --type=string
+      php occ config:system:set loglevel --value="2" --type=integer
+      php occ config:system:set log_rotate_size --value="104857600" --type=integer
+
+
+  nexcloud-app-install:
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}/ROOT
+      php occ app:install onlyoffice
+      php occ config:system:set onlyoffice DocumentServerUrl --value="/ds-vpath/" --type=string
+      php occ config:system:set onlyoffice DocumentServerInternalUrl --value="http://onlyoffice/" --type=string
+      php occ config:system:set onlyoffice StorageUrl --value="${env.protocol}://${env.domain}/" --type=string
+      php occ app:install fulltextsearch
+      php occ config:app:set fulltextsearch search_platform --value="OCA\\FullTextSearch_ElasticSearch\\Platform\\ElasticSearchPlatform" --type=string
+      php occ config:app:set fulltextsearch_elasticsearch elastic_host --value="${nodes.elastic.address}" --type=string
+      php occ config:app:set fulltextsearch_elasticsearch elastic_index --value="nxtcldindex" --type=string
+      php occ config:app:set fulltextsearch_elasticsearch enabled --value="yes" --type=string
+      php occ app:install ransomware_protection
+
 
 success: 
-  email: true
-  text: |
+  email: |
     **NextCloud Admin**
-    **URL**: [${env.protocol}://${env.domain}/](${env.protocol}://${env.domain}/)  
+    **URL**: [${env.protocol}://${env.domain}/](${env.protocol}://${env.domain}/)
     **User**: admin
     **Password**: ${globals.ADMIN_PASS}
-    **PostGres Web Admin**
-    **Admin Panel**: [${nodes.sqldb.master.url}](${nodes.sqldb.master.url})  
-    **User**: webadmin  
-    **Password**: ${nodes.sqldb.password}  
+  text: |
+    **NextCloud Admin**
+    **URL**: [${env.protocol}://${env.domain}/](${env.protocol}://${env.domain}/)
+    **User**: admin
+    **Password**: ${globals.ADMIN_PASS}
