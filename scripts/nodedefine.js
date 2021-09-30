@@ -30,8 +30,7 @@ var resp = {
 
 if (${settings.onlyoff:true}) {
     resp.nodes.push({
-        image: "onlyoffice/documentserver",
-        tag: "6.4.1",
+        image: "onlyoffice/documentserver:6.4.1",
         count: 1,
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
@@ -41,10 +40,9 @@ if (${settings.onlyoff:true}) {
     })
 }
 
-if (${settings.onlyoff:true}) {
+if (${settings.elastic:true}) {
     resp.nodes.push({
-        image: "elasticsearch",
-        tag: "6.8.18",
+        image: "elasticsearch:6.8.18",
         count: 1,
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
