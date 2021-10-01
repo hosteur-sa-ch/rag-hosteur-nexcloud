@@ -21,6 +21,8 @@ actions:
       php occ app:install fulltextsearch
       php occ app:install fulltextsearch_elasticsearch
       php occ config:app:set fulltextsearch search_platform --value="OCA\\FullTextSearch_ElasticSearch\\Platform\\ElasticSearchPlatform"
+      php occ config:app:set fulltextsearch app_navigation --value="1"
+      php occ config:app:set fulltextsearch enabled --value="yes"
       php occ config:app:set fulltextsearch_elasticsearch elastic_host --value="${nodes.elastic.address}"
       php occ config:app:set fulltextsearch_elasticsearch elastic_index --value="nxtcldindex"
       php occ config:app:set fulltextsearch_elasticsearch enabled --value="yes"

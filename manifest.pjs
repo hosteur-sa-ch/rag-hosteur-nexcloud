@@ -36,6 +36,7 @@ settings:
       placeholder: Your Hosteur S3 AK
       required: true
     - type: string
+      inputType: password
       name: s3sk
       caption: Hosteur S3 Secret Key
       placeholder: Your Hosteur S3 SK
