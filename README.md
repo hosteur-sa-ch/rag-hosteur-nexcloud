@@ -4,12 +4,14 @@
 
 >JPS Package for NextCloud / Hosteur Bucket
 
-Default Features :
- - Full Text Search (Elastic Search)
- - Document Online edition (OnlyOffice)
- - Anti Crypto Locker filter (Native)
+>No Hosteur Bucket Account yet ...
+>Go to [Hosteur](https://www.hosteur.com/business/stockage/bucket) to create your account.
 
-Current Version :
-- Nexcloud 22.1.1
-- OnlyOffice DocumentServer 6.4.1
-- ElasticSearch 6.8.18
+Preinstalled Features :
+ - Full Text Search (Elastic Search)
+ - MultiUsers Document Online edition (OnlyOffice)
+ - Anti Crypto Locker filter (Native)
+ - Brute force protection (Native)
+ - Groupware: Calendar, Contact, Deck (Native)
+
+*Current Version : Nexcloud 22.1.1, OnlyOffice DocumentServer 6.4.1, ElasticSearch 6.8.18*
