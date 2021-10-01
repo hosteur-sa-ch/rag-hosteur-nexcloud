@@ -21,6 +21,7 @@ actions:
       cd ${globals.nextcloudroot}/ROOT
       php occ app:install onlyoffice
       php occ config:system:set onlyoffice DocumentServerUrl --value="/ds-vpath/" --type=string
-      php occ config:system:set onlyoffice DocumentServerInternalUrl --value="http://onlyoffice/" --type=string
-      php occ config:system:set onlyoffice StorageUrl --value="${env.protocol}://${env.domain}/" --type=string
+      php occ config:system:set onlyoffice DocumentServerInternalUrl --value="${nodes.onlyoffice.url}" --type=string
+      php occ config:system:set onlyoffice StorageUrl --value="${nodes.cp.master.url}" --type=string
       php occ config:system:set trusted_domains 1 --value="${nodes.onlyoffice.url}" --type=string
+      php occ config:system:set allow_local_remote_servers --value="true" --type=boolean
