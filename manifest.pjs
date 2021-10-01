@@ -35,7 +35,6 @@ settings:
       required: true
       caption: Hosteur S3 Account Key
       placeholder: Your Hosteur S3 AK
-      required: true
     - type: string
       required: true
       inputType: password
