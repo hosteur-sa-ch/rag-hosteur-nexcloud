@@ -32,10 +32,12 @@ settings:
   fields:
     - type: string
       name: s3ak
+      required: true
       caption: Hosteur S3 Account Key
       placeholder: Your Hosteur S3 AK
       required: true
     - type: string
+      required: true
       inputType: password
       name: s3sk
       caption: Hosteur S3 Secret Key
