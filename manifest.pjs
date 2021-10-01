@@ -46,16 +46,19 @@ settings:
       name: advfeat
       value: true
       disabled: false
+      tooltip: Preinstalled Calendar, Contact and Deck apps
     - type: checkbox
       caption: Install FullTextSearch Elastic Search instance
       name: elastic
       value: true
       disabled: false
+      tooltip: Preinstalled ElasticSearch for FTS
     - type: checkbox
       caption: Install OnlyOffice Document Service
       name: onlyoff
       value: true
       disabled: false
+      tooltip: Preinstalled OnlyOffice Document server for multi-editing online features
              
 onBeforeInstall: /scripts/nodedefine.js?_r=${fn.random}
 
