@@ -80,7 +80,7 @@ onInstall:
     - nexcloud-fulltextsearch-install
   - if (${settings.advfeat:true}):
     - nexcloud-advfeat-install
-  
+  - nexcloud-operation-install
 
 actions:
   nextcloud-src-install:
@@ -129,9 +129,11 @@ actions:
       php occ config:system:set log_rotate_size --value="104857600" --type=integer
       php occ config:system:set overwriteprotocol --value="https" --type=string
       php occ config:system:set overwrite.cli.url --value="${env.protocol}://${env.domain}/" --type=string
+      php occ config:system:set updater.release.channel --value="stable" --type=string
       export OC_PASS=${globals.ADMIN_PASS}
       php occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admin"
       php occ background:cron
+
 
   nexcloud-app-install:
     cmd[cp]: |-
@@ -151,6 +153,10 @@ actions:
 
   nexcloud-fulltextsearch-install:
     - install: ${globals.PATH}/addons/fulltextsearch.jps
+  
+  nexcloud-operation-install:
+    - install: ${globals.PATH}/addons/nextcloudops.jps
+
 
 success: 
   email: |
