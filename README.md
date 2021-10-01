@@ -9,7 +9,7 @@
 
 Preinstalled Features :
  - Full Text Search (Elastic Search)
- - MultiUsers Document Online edition (OnlyOffice)
+ - MultiUsers Online Documents editing (OnlyOffice)
  - Anti Crypto Locker filter (Native)
  - Brute force protection (Native)
  - Groupware: Calendar, Contact, Deck (Native)
