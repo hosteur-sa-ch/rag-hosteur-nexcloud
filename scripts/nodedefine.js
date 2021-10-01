@@ -2,15 +2,6 @@ var resp = {
     result: 0,
     ssl: !!jelastic.billing.account.GetQuotas('environment.jelasticssl.enabled').array[0].value,
     nodes: [{
-      nodeType: "apache2",
-      flexibleCloudlets: 16,
-      fixedCloudlets: 1,
-      diskLimit: 30,
-      engine: "php7.4",
-      nodeGroup: "cp",
-      displayName: "Apps"
-    },
-    {
         nodeType: "postgres13",
         flexibleCloudlets: 24,
         fixedCloudlets: 12,
@@ -37,6 +28,31 @@ if (${settings.onlyoff:true}) {
         diskLimit: 10,
         nodeGroup: "onlyoffice",
         displayName: "Document Services"
+    })
+    resp.nodes.push({
+        nodeType: "apache2",
+        flexibleCloudlets: 16,
+        fixedCloudlets: 1,
+        diskLimit: 30,
+        engine: "php7.4",
+        nodeGroup: "cp",
+        displayName: "Apps",
+        links: {
+            sourceNodeGroup: "onlyoffice",
+            alias: "onlyoffice"
+            }
+    })
+} 
+else 
+{
+    resp.nodes.push({
+        nodeType: "apache2",
+        flexibleCloudlets: 16,
+        fixedCloudlets: 1,
+        diskLimit: 30,
+        engine: "php7.4",
+        nodeGroup: "cp",
+        displayName: "Apps",
     })
 }
 

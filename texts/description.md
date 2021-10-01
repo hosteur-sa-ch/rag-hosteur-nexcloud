@@ -1,14 +1,13 @@
 Nextcloud with Hosteur Bucket Storage.
 
-No Hosteur Bucket Account yet ...
+>No Hosteur Bucket Account yet ...
+>Go to [Hosteur](https://www.hosteur.com/business/stockage/bucket) to create your account.
 
-Go to [Hosteur](https://www.hosteur.com/business/stockage/bucket) to create your account.
-
-Default Features :
+Preinstalled Features :
  - Full Text Search (Elastic Search)
- - Document Online edition (OnlyOffice)
+ - MultiUsers Document Online edition (OnlyOffice)
  - Anti Crypto Locker filter (Native)
  - Brute force protection (Native)
  - Groupware: Calendar, Contact, Deck (Native)
 
->Current Version : Nexcloud 22.1.1, OnlyOffice DocumentServer 6.4.1, ElasticSearch 6.8.18
+*Current Version : Nexcloud 22.1.1, OnlyOffice DocumentServer 6.4.1, ElasticSearch 6.8.18*

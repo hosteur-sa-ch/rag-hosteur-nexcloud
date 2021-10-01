@@ -41,7 +41,7 @@ settings:
       placeholder: Your Hosteur S3 SK
       required: true
     - type: checkbox
-      caption: Install Base Applications Tools
+      caption: Install Base Application Tools
       name: advfeat
       value: true
       disabled: false
