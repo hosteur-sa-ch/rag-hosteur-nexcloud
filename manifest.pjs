@@ -42,7 +42,7 @@ settings:
       caption: Hosteur S3 Secret Key
       placeholder: Your Hosteur S3 SK
     - type: checkbox
-      caption: Install Base Application Tools
+      caption: Install GroupWare Applications
       name: advfeat
       value: true
       disabled: false
