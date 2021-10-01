@@ -1,0 +1,48 @@
+jpsType: update
+jpsVersion: '1.0'
+name: NextCloud Operations
+description: Do operation for NextCloud
+logo: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/images/logo.png
+baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
+
+
+mixins:
+ - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
+
+globals:
+  nextcloudroot: /var/www/webroot
+
+buttons:
+  - confirmText: Activate Maintenance Mode?
+    loadingText: Activating
+    action: maintenanceon
+    caption: Maintenance Mode : ON
+    successText: Done!
+buttons:
+  - confirmText: Desactivate Maintenance Mode?
+    loadingText: Desactivating
+    action: maintenanceoff
+    caption: Maintenance Mode : OFF
+    successText: Done!
+buttons:
+  - confirmText: Upgrade NextCloud
+    loadingText: Upgrading (Set active Maintenance Mode on during operation)
+    action: upgrade
+    caption: Upgrade installation
+    successText: Done!
+
+actions:
+  maintenanceoff:
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}/ROOT
+      php occ maintenance:mode --off
+  maintenanceon:
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}/ROOT
+      php occ maintenance:mode --on
+  upgrade:
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}/ROOT
+      php occ maintenance:mode --on
+      php occ upgrade
+      php occ maintenance:mode --off
