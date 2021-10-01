@@ -41,7 +41,6 @@ settings:
       name: s3sk
       caption: Hosteur S3 Secret Key
       placeholder: Your Hosteur S3 SK
-      required: true
     - type: checkbox
       caption: Install Base Application Tools
       name: advfeat
