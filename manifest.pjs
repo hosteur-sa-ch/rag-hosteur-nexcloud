@@ -80,7 +80,6 @@ onInstall:
     - nexcloud-fulltextsearch-install
   - if (${settings.advfeat:true}):
     - nexcloud-advfeat-install
-  - nexcloud-operation-install
 
 actions:
   nextcloud-src-install:
