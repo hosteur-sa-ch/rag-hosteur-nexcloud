@@ -54,7 +54,7 @@ settings:
       disabled: false
       tooltip: Preinstalled ElasticSearch for FTS.
     - type: checkbox
-      caption: Install OnlyOffice Document Service
+      caption: Install OnlyOffice Document Service (beta)
       name: onlyoff
       value: true
       disabled: false
