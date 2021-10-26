@@ -138,7 +138,6 @@ actions:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}/ROOT
       php occ app:install ransomware_protection
-      php occ app:install bruteforcesettings
 
   nexcloud-advfeat-install:
     cmd[cp]: |-
