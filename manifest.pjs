@@ -1,4 +1,4 @@
-version: '1.0.0'
+version: '1.22.2'
 appVersion: latest
 type: install
 id: hstnextcloud
