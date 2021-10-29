@@ -30,7 +30,7 @@ if (${settings.onlyoff:true}) {
         displayName: "Document Services"
     })
     resp.nodes.push({
-        nodeType: "apache2",
+        nodeType: "nginxphp-dockerized",
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
         diskLimit: 30,
