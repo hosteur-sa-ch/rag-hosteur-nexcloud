@@ -74,6 +74,7 @@ onInstall:
   - restartNodes:
     - nodeGroup: [cp]
   - nexcloud-app-install
+  - install-cron
   - if (${settings.onlyoff:true}):
     - nexcloud-onlyoffice-install
   - if (${settings.elastic:true}):
@@ -93,6 +94,7 @@ actions:
       chown -R nginx.nginx ${globals.nextcloudroot}/ROOT
       git submodule update --init
       wget -O /etc/php.ini https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/ressources/php.ini
+      wget -O /etc/nginx/conf.d/sites-enabled/default.conf https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/ressources/nginx.conf
     user: root
 
   nexcloud-db-install:
@@ -133,6 +135,11 @@ actions:
       php occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admin"
       php occ background:cron
 
+  install-cron
+    writeFile:
+      nodeGroup: cp
+      path: "/var/spool/cron/nginx"
+      body: "*/5  *  *  *  * php -f /var/www/webroot/ROOT/cron.php"
 
   nexcloud-app-install:
     cmd[cp]: |-

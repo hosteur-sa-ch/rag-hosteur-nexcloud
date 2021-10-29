@@ -74,6 +74,7 @@ onInstall:
   - restartNodes:
     - nodeGroup: [cp]
   - nexcloud-app-install
+  - install-cron
   - if (${settings.onlyoff:true}):
     - nexcloud-onlyoffice-install
   - if (${settings.elastic:true}):
@@ -133,6 +134,11 @@ actions:
       php occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admin"
       php occ background:cron
 
+  install-cron
+    writeFile:
+      nodeGroup: cp
+      path: "/var/spool/cron/apache"
+      body: "*/5  *  *  *  * php -f /var/www/webroot/ROOT/cron.php"
 
   nexcloud-app-install:
     cmd[cp]: |-
