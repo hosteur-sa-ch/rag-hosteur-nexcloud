@@ -2,7 +2,7 @@ version: '1.22.2'
 appVersion: latest
 type: install
 id: hstnextcloud
-name: Hosteur NextCloud (Bucket Storage)
+name: Hosteur NextCloud (Bucket Storage / Nginx)
 baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
 logo: /images/logo.png
 homepage: http://www.nextcloud.com/
@@ -135,7 +135,7 @@ actions:
       php occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admin"
       php occ background:cron
 
-  install-cron
+  install-cron:
     writeFile:
       nodeGroup: cp
       path: "/var/spool/cron/nginx"

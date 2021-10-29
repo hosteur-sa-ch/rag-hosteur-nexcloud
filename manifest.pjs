@@ -134,7 +134,7 @@ actions:
       php occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admin"
       php occ background:cron
 
-  install-cron
+  install-cron:
     writeFile:
       nodeGroup: cp
       path: "/var/spool/cron/apache"
