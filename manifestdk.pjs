@@ -71,8 +71,6 @@ onInstall:
     - nodeGroup: [cp]
   - nexcloud-db-install
   - nexcloud-storage-install
-  - restartNodes:
-    - nodeGroup: [cp]
   - nexcloud-app-install
   - if (${settings.onlyoff:true}):
     - nexcloud-onlyoffice-install
@@ -124,7 +122,7 @@ actions:
       sudo -u www-data php -d  memory_limit=2048M occ config:system:set overwrite.cli.url --value="${env.protocol}://${env.domain}/" --type=string
       sudo -u www-data php -d  memory_limit=2048M occ config:system:set updater.release.channel --value="stable" --type=string
       export OC_PASS=${globals.ADMIN_PASS}
-      sudo -u www-data php -d  memory_limit=2048M occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admin"
+      su -s /bin/sh www-data -c 'php -d  memory_limit=2048M occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admin"'
       sudo -u www-data php -d  memory_limit=2048M occ background:cron
 
   install-cron:
