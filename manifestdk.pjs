@@ -91,12 +91,12 @@ actions:
 
   nexcloud-db-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
+      cd ${globals.nextcloudroot}
       sudo -u www-data php -d  memory_limit=2048M occ maintenance:install --database "pgsql" --database-name "nextcloud" --database-user "webadmin" --database-host ${nodes.postgres13.address} --database-pass ${nodes.postgres13.password}  --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
       
   nexcloud-storage-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
+      cd ${globals.nextcloudroot}
       sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments bucket --value="${globals.BUCKETNAME}" --type=string
       sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments autocreate --value="true" --type=boolean
       sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments key --value="${settings.s3ak}" --type=string
@@ -135,14 +135,14 @@ actions:
 
   nexcloud-app-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
+      cd ${globals.nextcloudroot}
       sudo -u www-data php -d  memory_limit=2048M occ app:install ransomware_protection
       sudo -u www-data php -d  memory_limit=2048M occ app:install bruteforcesettings
       
 
   nexcloud-advfeat-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
+      cd ${globals.nextcloudroot}
       sudo -u www-data php -d  memory_limit=2048M occ app:install calendar
       sudo -u www-data php -d  memory_limit=2048M occ app:install contacts
       sudo -u www-data php -d  memory_limit=2048M occ app:install deck

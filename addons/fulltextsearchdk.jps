@@ -9,7 +9,7 @@ mixins:
  - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
 
 globals:
-  nextcloudroot: /var/www/webroot
+  nextcloudroot: /var/www/html
 
 onInstall:
   - nexcloud-fulltextsearch-install
