@@ -1,0 +1,29 @@
+jpsType: update
+jpsVersion: '1.0'
+name: FullTextSearch
+description: Add ElasticSearch FullTextSearch to NextCloud
+logo: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/images/elastic_search-logo.png
+baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
+
+mixins:
+ - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
+
+globals:
+  nextcloudroot: /var/www/webroot
+
+onInstall:
+  - nexcloud-fulltextsearch-install
+
+actions:
+  nexcloud-fulltextsearch-install:
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}/ROOT
+      sudo -u www-data php -d  memory_limit=2048M occ app:install fulltextsearch
+      sudo -u www-data php -d  memory_limit=2048M occ app:install fulltextsearch_elasticsearch
+      sudo -u www-data php -d  memory_limit=2048M occ app:install files_fulltextsearch
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch search_platform --value="OCA\\FullTextSearch_ElasticSearch\\Platform\\ElasticSearchPlatform"
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch app_navigation --value="1"
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch enabled --value="yes"
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch_elasticsearch elastic_host --value="${nodes.elastic.address}"
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch_elasticsearch elastic_index --value="nxtcldindex"
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch_elasticsearch enabled --value="yes"
