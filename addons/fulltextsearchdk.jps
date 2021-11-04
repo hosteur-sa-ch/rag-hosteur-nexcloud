@@ -17,7 +17,7 @@ onInstall:
 actions:
   nexcloud-fulltextsearch-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
+      cd ${globals.nextcloudroot}
       sudo -u www-data php -d  memory_limit=2048M occ app:install fulltextsearch
       sudo -u www-data php -d  memory_limit=2048M occ app:install fulltextsearch_elasticsearch
       sudo -u www-data php -d  memory_limit=2048M occ app:install files_fulltextsearch

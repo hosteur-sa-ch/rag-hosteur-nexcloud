@@ -18,7 +18,7 @@ onInstall:
 actions:
   nexcloud-onlyoffice-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
+      cd ${globals.nextcloudroot}
       sudo -u www-data php -d  memory_limit=2048M occ app:install onlyoffice
       sudo -u www-data php -d  memory_limit=2048M occ config:system:set onlyoffice DocumentServerUrl --value="/ds-vpath/" --type=string
       sudo -u www-data php -d  memory_limit=2048M occ config:system:set onlyoffice DocumentServerInternalUrl --value="http://docker${nodes.onlyoffice.id}-${env.domain}" --type=string
