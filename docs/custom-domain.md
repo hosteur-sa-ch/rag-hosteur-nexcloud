@@ -22,3 +22,5 @@ sudo -u www-data php -d  memory_limit=2048M occ config:system:set trusted_domain
 
 - Sauvegarder la nouvelle configuration, celle-ci doit être valide.
 - Tester d'ouvrir un fichier docx ou autre onlyoffice ddoit s'ouvrir correctement.
+
+Vous pouvez maintenant retirer le précedent node Docker OnlyOffice (Document Servers) de l'environement NextCloud.
