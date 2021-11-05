@@ -15,7 +15,7 @@ categories:
   - apps/file-manager
 
 description:
-  text: /texts/description.md
+  text: /texts/descriptionoof.md
 
 mixins:
  - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
