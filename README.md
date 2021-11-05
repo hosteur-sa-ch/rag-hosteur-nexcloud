@@ -15,3 +15,7 @@ Preinstalled Features :
  - Groupware: Calendar, Contact, Deck (Native)
 
 *Current Version : Apache PHP 7.4, PostGres SQL 13, Redis 6.x, Nexcloud 22.1.1, OnlyOffice DocumentServer 6.4.1, ElasticSearch 6.8.18*
+
+*See more documentation*
+
+[Here](./docs/)
