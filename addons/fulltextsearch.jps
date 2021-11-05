@@ -20,6 +20,7 @@ actions:
       cd ${globals.nextcloudroot}/ROOT
       php occ app:install fulltextsearch
       php occ app:install fulltextsearch_elasticsearch
+      php occ app:install files_fulltextsearch
       php occ config:app:set fulltextsearch search_platform --value="OCA\\FullTextSearch_ElasticSearch\\Platform\\ElasticSearchPlatform"
       php occ config:app:set fulltextsearch app_navigation --value="1"
       php occ config:app:set fulltextsearch enabled --value="yes"

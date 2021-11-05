@@ -146,6 +146,22 @@ actions:
       cd ${globals.nextcloudroot}/ROOT
       php occ app:install ransomware_protection
       php occ app:install bruteforcesettings
+      php occ app:install activity
+      php occ app:install circles
+      php occ app:install files_pdfviewer
+      php occ app:install files_rightclick
+      php occ app:install files_videoplayer
+      php occ app:install firstrunwizard
+      php occ app:install logreader
+      php occ app:install nextcloud_announcements
+      php occ app:install notifications
+      php occ app:install password_policy
+      php occ app:install photos
+      php occ app:install privacy
+      php occ app:install recommendations
+      php occ app:install serverinfo
+      php occ app:install text
+      php occ app:install viewer
 
   nexcloud-advfeat-install:
     cmd[cp]: |-

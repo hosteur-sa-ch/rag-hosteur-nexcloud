@@ -20,8 +20,8 @@ actions:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}/ROOT
       php occ app:install onlyoffice
-      php occ config:system:set onlyoffice DocumentServerUrl --value="/ds-vpath/" --type=string
-      php occ config:system:set onlyoffice DocumentServerInternalUrl --value="http://docker${nodes.onlyoffice.id}-${env.domain}" --type=string
-      php occ config:system:set onlyoffice StorageUrl --value="http://${env.domain}" --type=string
+      php occ config:system:set onlyoffice DocumentServerUrl --value="https://docker${nodes.onlyoffice.id}-${env.domain}/" --type=string
+      php occ config:system:set onlyoffice DocumentServerInternalUrl --value="http://docker${nodes.onlyoffice.id}-${env.domain}/" --type=string
+      php occ config:system:set onlyoffice StorageUrl --value="http://${env.domain}/" --type=string
       php occ config:system:set trusted_domains 1 --value="docker${nodes.onlyoffice.id}-${env.domain}" --type=string
       php occ config:system:set allow_local_remote_servers --value="true" --type=boolean
