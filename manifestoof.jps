@@ -35,9 +35,9 @@ success:
   email: |
     **Onlyoffice Document Server**
 
-    **URL**: [Portal](${env.protocol}://${env.domain}/)
+    **URL**: [Document Service](https://docker${nodes.onlyoffice.id}-${env.domain}/)
 
   text: |
     **Onlyoffice Document Server**
 
-    **URL**: [Portal](${env.protocol}://${env.domain}/)
+    **URL**: [Document Service](https://docker${nodes.onlyoffice.id}-${env.domain}/)
