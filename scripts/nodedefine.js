@@ -30,7 +30,7 @@ if (${settings.onlyoff:true}) {
         displayName: "Document Services"
     })
     resp.nodes.push({
-        nodeType: "apache2",
+        image: "nextcloud:production-apache",
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
         diskLimit: 30,
@@ -46,11 +46,10 @@ if (${settings.onlyoff:true}) {
 else 
 {
     resp.nodes.push({
-        nodeType: "apache2",
+        image: "nextcloud:production-apache",
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
         diskLimit: 30,
-        engine: "php7.4",
         nodeGroup: "cp",
         displayName: "Apps",
     })

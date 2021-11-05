@@ -9,7 +9,7 @@ mixins:
  - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
 
 globals:
-  nextcloudroot: /var/www/webroot
+  nextcloudroot: /var/www/html
 
 onInstall:
   - nexcloud-fulltextsearch-install
@@ -17,13 +17,13 @@ onInstall:
 actions:
   nexcloud-fulltextsearch-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
-      php occ app:install fulltextsearch
-      php occ app:install fulltextsearch_elasticsearch
-      php occ app:install files_fulltextsearch
-      php occ config:app:set fulltextsearch search_platform --value="OCA\\FullTextSearch_ElasticSearch\\Platform\\ElasticSearchPlatform"
-      php occ config:app:set fulltextsearch app_navigation --value="1"
-      php occ config:app:set fulltextsearch enabled --value="yes"
-      php occ config:app:set fulltextsearch_elasticsearch elastic_host --value="${nodes.elastic.address}"
-      php occ config:app:set fulltextsearch_elasticsearch elastic_index --value="nxtcldindex"
-      php occ config:app:set fulltextsearch_elasticsearch enabled --value="yes"
+      cd ${globals.nextcloudroot}
+      sudo -u www-data php -d  memory_limit=2048M occ app:install fulltextsearch
+      sudo -u www-data php -d  memory_limit=2048M occ app:install fulltextsearch_elasticsearch
+      sudo -u www-data php -d  memory_limit=2048M occ app:install files_fulltextsearch
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch search_platform --value="OCA\\FullTextSearch_ElasticSearch\\Platform\\ElasticSearchPlatform"
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch app_navigation --value="1"
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch enabled --value="yes"
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch_elasticsearch elastic_host --value="${nodes.elastic.address}"
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch_elasticsearch elastic_index --value="nxtcldindex"
+      sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch_elasticsearch enabled --value="yes"

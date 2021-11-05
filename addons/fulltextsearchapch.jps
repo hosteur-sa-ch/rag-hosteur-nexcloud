@@ -1,0 +1,29 @@
+jpsType: update
+jpsVersion: '1.0'
+name: FullTextSearch
+description: Add ElasticSearch FullTextSearch to NextCloud
+logo: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/images/elastic_search-logo.png
+baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
+
+mixins:
+ - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
+
+globals:
+  nextcloudroot: /var/www/webroot
+
+onInstall:
+  - nexcloud-fulltextsearch-install
+
+actions:
+  nexcloud-fulltextsearch-install:
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}/ROOT
+      php occ app:install fulltextsearch
+      php occ app:install fulltextsearch_elasticsearch
+      php occ app:install files_fulltextsearch
+      php occ config:app:set fulltextsearch search_platform --value="OCA\\FullTextSearch_ElasticSearch\\Platform\\ElasticSearchPlatform"
+      php occ config:app:set fulltextsearch app_navigation --value="1"
+      php occ config:app:set fulltextsearch enabled --value="yes"
+      php occ config:app:set fulltextsearch_elasticsearch elastic_host --value="${nodes.elastic.address}"
+      php occ config:app:set fulltextsearch_elasticsearch elastic_index --value="nxtcldindex"
+      php occ config:app:set fulltextsearch_elasticsearch enabled --value="yes"

@@ -22,7 +22,7 @@ mixins:
 
 
 globals:
-  nextcloudroot: /var/www/webroot
+  nextcloudroot: /var/www/html
   DB_ADMIN_PASS: "${fn.password}"
   ADMIN_PASS: "${fn.password}"
   BUCKETNAME: "nxtclddata-${fn.random}"
@@ -71,10 +71,7 @@ onInstall:
     - nodeGroup: [cp]
   - nexcloud-db-install
   - nexcloud-storage-install
-  - restartNodes:
-    - nodeGroup: [cp]
   - nexcloud-app-install
-  - install-cron
   - if (${settings.onlyoff:true}):
     - nexcloud-onlyoffice-install
   - if (${settings.elastic:true}):
@@ -86,72 +83,67 @@ actions:
   nextcloud-src-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}
-      git clone https://github.com/nextcloud/server.git
-      rm -rf ${globals.nextcloudroot}/ROOT
-      mv ${globals.nextcloudroot}/server ${globals.nextcloudroot}/ROOT
-      cd ${globals.nextcloudroot}/ROOT
-      git checkout ${globals.NEXTCLOUD_RV}
-      chown -R apache.apache ${globals.nextcloudroot}/ROOT
-      git submodule update --init
-      wget -O /etc/php.ini https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/ressources/php.ini
+      mkdir -p /var/log/nextcloud
+      chown www-data.www-data /var/log/nextcloud
     user: root
 
   nexcloud-db-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
-      php occ maintenance:install --database "pgsql" --database-name "nextcloud" --database-user "webadmin" --database-host ${nodes.postgres13.address} --database-pass ${nodes.postgres13.password}  --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
+      cd ${globals.nextcloudroot}
+      sudo -u www-data php -d  memory_limit=2048M occ maintenance:install --database "pgsql" --database-name "nextcloud" --database-user "webadmin" --database-host ${nodes.postgres13.address} --database-pass ${nodes.postgres13.password}  --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
       
   nexcloud-storage-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
-      php occ config:system:set objectstore arguments bucket --value="${globals.BUCKETNAME}" --type=string
-      php occ config:system:set objectstore arguments autocreate --value="true" --type=boolean
-      php occ config:system:set objectstore arguments key --value="${settings.s3ak}" --type=string
-      php occ config:system:set objectstore arguments secret --value="${settings.s3sk}" --type=string
-      php occ config:system:set objectstore arguments hostname --value="s3.hosteur.io" --type=string
-      php occ config:system:set objectstore arguments port --value="443" --type=integer
-      php occ config:system:set objectstore arguments use_ssl --value="true" --type=boolean
-      php occ config:system:set objectstore arguments region --value="defaultRegion" --type=string
-      php occ config:system:set objectstore arguments verify_ssl --value="false" --type=boolean
-      php occ config:system:set objectstore class --value="\\OC\\Files\\ObjectStore\\S3" --type=string
-      php occ config:system:delete datadirectory
-      php occ config:system:set redis host --value="${nodes.nosqldb.master.address}" --type=string
-      php occ config:system:set redis port --value="6379" --type=integer
-      php occ config:system:set redis dbindex --value="0" --type=integer
-      php occ config:system:set redis password --value="${nodes.nosqldb.master.password}" --type=string
-      php occ config:system:set redis timeout --value="1.5" --type=float
-      php occ config:system:set memcache.distributed --value="\\OC\\Memcache\\Redis" --type=string
-      php occ config:system:set trusted_domains 0 --value="${env.domain}" --type=string
-      php occ config:system:set logtimezone --value="Europe/Paris" --type=string
-      php occ config:system:set log_type --value="owncloud" --type=string
-      php occ config:system:set logfile --value="/var/log/httpd/nextcloud.log" --type=string
-      php occ config:system:set loglevel --value="2" --type=integer
-      php occ config:system:set log_rotate_size --value="104857600" --type=integer
-      php occ config:system:set overwriteprotocol --value="https" --type=string
-      php occ config:system:set overwrite.cli.url --value="${env.protocol}://${env.domain}/" --type=string
-      php occ config:system:set updater.release.channel --value="stable" --type=string
+      cd ${globals.nextcloudroot}
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments bucket --value="${globals.BUCKETNAME}" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments autocreate --value="true" --type=boolean
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments key --value="${settings.s3ak}" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments secret --value="${settings.s3sk}" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments hostname --value="s3.hosteur.io" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments port --value="443" --type=integer
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments use_ssl --value="true" --type=boolean
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments region --value="defaultRegion" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments verify_ssl --value="false" --type=boolean
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore class --value="\\OC\\Files\\ObjectStore\\S3" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:delete datadirectory
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set redis host --value="${nodes.nosqldb.master.address}" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set redis port --value="6379" --type=integer
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set redis dbindex --value="0" --type=integer
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set redis password --value="${nodes.nosqldb.master.password}" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set redis timeout --value="1.5" --type=float
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set memcache.distributed --value="\\OC\\Memcache\\Redis" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set trusted_domains 0 --value="${env.domain}" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set logtimezone --value="Europe/Paris" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set log_type --value="owncloud" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set logfile --value="/var/log/nextcloud/nextcloud.log" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set loglevel --value="2" --type=integer
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set log_rotate_size --value="104857600" --type=integer
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set overwriteprotocol --value="https" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set overwrite.cli.url --value="${env.protocol}://${env.domain}/" --type=string
+      sudo -u www-data php -d  memory_limit=2048M occ config:system:set updater.release.channel --value="stable" --type=string
       export OC_PASS=${globals.ADMIN_PASS}
-      php occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admin"
-      php occ background:cron
+      su -s /bin/sh www-data -c 'php -d  memory_limit=2048M occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admin"'
+      sudo -u www-data php -d  memory_limit=2048M occ background:cron
 
   install-cron:
     writeFile:
       nodeGroup: cp
-      path: "/var/spool/cron/apache"
+      path: "/var/spool/cron/nginx"
       body: "*/5  *  *  *  * php -f /var/www/webroot/ROOT/cron.php"
 
   nexcloud-app-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
-      php occ app:install ransomware_protection
-      php occ app:install bruteforcesettings
+      cd ${globals.nextcloudroot}
+      sudo -u www-data php -d  memory_limit=2048M occ app:install ransomware_protection
+      sudo -u www-data php -d  memory_limit=2048M occ app:install bruteforcesettings
+      
 
   nexcloud-advfeat-install:
     cmd[cp]: |-
-      cd ${globals.nextcloudroot}/ROOT
-      php occ app:install calendar
-      php occ app:install contacts
-      php occ app:install deck
+      cd ${globals.nextcloudroot}
+      sudo -u www-data php -d  memory_limit=2048M occ app:install calendar
+      sudo -u www-data php -d  memory_limit=2048M occ app:install contacts
+      sudo -u www-data php -d  memory_limit=2048M occ app:install deck
 
   nexcloud-onlyoffice-install:
     - install: ${globals.PATH}/addons/onlyoffice.jps
