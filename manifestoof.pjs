@@ -1,0 +1,43 @@
+version: '1.6.4'
+appVersion: latest
+type: install
+id: hstonlyoffice
+name: OnlyOffice Document Server Community
+baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
+logo: /images/onlyoffice-logo.png
+homepage: https://www.onlyoffice.com/
+ssl: true
+skipNodeEmails: true
+
+categories:
+  - apps/file-management
+  - apps/popular
+  - apps/file-manager
+
+description:
+  text: /texts/description.md
+
+mixins:
+ - https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main/configs/vers.yaml
+
+
+nodes: 
+  - image: "onlyoffice/documentserver:6.4.1"
+    count: 1
+    flexibleCloudlets: 16
+    fixedCloudlets: 1
+    diskLimit: 10
+    nodeGroup: "onlyoffice"
+    skipNodeEmails: true
+    displayName: "Document Services"
+
+success: 
+  email: |
+    **Onlyoffice Document Server**
+
+    **URL**: [Portal](${env.protocol}://${env.domain}/)
+
+  text: |
+    **Onlyoffice Document Server**
+
+    **URL**: [Portal](${env.protocol}://${env.domain}/)
