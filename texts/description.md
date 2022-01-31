@@ -10,4 +10,4 @@ Preinstalled Features :
  - Brute force protection (Native)
  - Groupware: Calendar, Contact, Deck (Native)
 
-*Current Version : Nexcloud 22.2.0, OnlyOffice DocumentServer 6.4.1, ElasticSearch 6.8.18*
+*Current Version : Nexcloud 23.0.1, OnlyOffice DocumentServer 6.4.1, ElasticSearch 6.8.18*
