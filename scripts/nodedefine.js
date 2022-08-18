@@ -57,7 +57,7 @@ else
 
 if (${settings.elastic:true}) {
     resp.nodes.push({
-        image: "elasticsearch:6.8.18",
+        image: "elasticsearch:7.17.5",
         count: 1,
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
