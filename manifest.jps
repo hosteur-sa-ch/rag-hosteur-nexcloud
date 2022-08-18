@@ -76,6 +76,8 @@ onInstall:
     - nexcloud-onlyoffice-install
   - if (${settings.elastic:true}):
     - nexcloud-fulltextsearch-install
+    - restartNodes:
+      - nodeGroup: [elastic]
   - if (${settings.advfeat:true}):
     - nexcloud-advfeat-install
 
