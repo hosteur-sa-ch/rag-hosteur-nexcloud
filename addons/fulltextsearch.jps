@@ -13,6 +13,7 @@ globals:
 
 onInstall:
   - nexcloud-fulltextsearch-install
+  - install-ingest-plugin
 
 actions:
   nexcloud-fulltextsearch-install:
@@ -27,3 +28,8 @@ actions:
       sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch_elasticsearch elastic_host --value="${nodes.elastic.address}"
       sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch_elasticsearch elastic_index --value="nxtcldindex"
       sudo -u www-data php -d  memory_limit=2048M occ config:app:set fulltextsearch_elasticsearch enabled --value="yes"
+
+  install-ingest-plugin:
+    cmd[elastic]: |-
+      elasticsearch-plugin install ingest-attachment
+    user: root
