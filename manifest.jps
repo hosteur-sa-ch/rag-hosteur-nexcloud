@@ -92,7 +92,7 @@ actions:
   nexcloud-db-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}
-      sudo -u www-data php -d  memory_limit=2048M occ maintenance:install --database "pgsql" --database-name "nextcloud" --database-user "webadmin" --database-host ${nodes.postgres13.address} --database-pass ${nodes.postgres13.password}  --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
+      sudo -u www-data php -d  memory_limit=2048M occ maintenance:install --database "pgsql" --database-name "nextcloud" --database-user "webadmin" --database-host ${nodes.postgres14.address} --database-pass ${nodes.postgres14.password}  --admin-user "admin" --admin-pass ${globals.ADMIN_PASS}
       
   nexcloud-storage-install:
     cmd[cp]: |-
