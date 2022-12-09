@@ -13,6 +13,7 @@ categories:
   - apps/file-management
   - apps/popular
   - apps/file-manager
+  - apps/collaboration
 
 description:
   text: /texts/description.md
