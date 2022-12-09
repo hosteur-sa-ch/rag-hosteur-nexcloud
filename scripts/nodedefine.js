@@ -2,7 +2,7 @@ var resp = {
     result: 0,
     ssl: !!jelastic.billing.account.GetQuotas('environment.jelasticssl.enabled').array[0].value,
     nodes: [{
-        nodeType: "postgres13",
+        nodeType: "postgres14",
         flexibleCloudlets: 24,
         fixedCloudlets: 12,
         diskLimit: 50,
