@@ -1,4 +1,4 @@
-version: '1.22.3'
+version: '1.25.3'
 appVersion: latest
 type: install
 id: hstnextcloud
@@ -72,7 +72,6 @@ onInstall:
   - pgsql-createdb
   - nexcloud-db-install
   - nexcloud-storage-install
-  - nexcloud-app-install
   - if (${settings.onlyoff:true}):
     - nexcloud-onlyoffice-install
   - if (${settings.elastic:true}):
@@ -89,14 +88,11 @@ actions:
       mkdir -p /var/log/nextcloud
       chown www-data.www-data /var/log/nextcloud
     user: root
-    
+
   pgsql-createdb:
-    prepareSqlDatabase
-    - nodeGroup: sqldb
-      loginCredentials:
-        user: webadmin
-        password: ${nodes.postgres14.password}
-      newDatabaseName: nextcloud
+    cmd[sqldb]: |-
+      psql -U webadmin -d postgres -c "CREATE DATABASE nextcloud;"
+    user: postgres
 
   nexcloud-db-install:
     cmd[cp]: |-
