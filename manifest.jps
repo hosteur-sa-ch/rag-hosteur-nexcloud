@@ -69,6 +69,7 @@ onInstall:
   - nextcloud-src-install
   - restartNodes:
     - nodeGroup: [cp]
+  - pgsql-createdb
   - nexcloud-db-install
   - nexcloud-storage-install
   - nexcloud-app-install
@@ -88,6 +89,14 @@ actions:
       mkdir -p /var/log/nextcloud
       chown www-data.www-data /var/log/nextcloud
     user: root
+    
+  pgsql-createdb:
+    prepareSqlDatabase
+    - nodeGroup: sqldb
+      loginCredentials:
+        user: webadmin
+        password: ${nodes.postgres14.password}
+      newDatabaseName: nextcloud
 
   nexcloud-db-install:
     cmd[cp]: |-
