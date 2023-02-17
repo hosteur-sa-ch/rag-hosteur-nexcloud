@@ -2,7 +2,7 @@ var resp = {
     result: 0,
     ssl: !!jelastic.billing.account.GetQuotas('environment.jelasticssl.enabled').array[0].value,
     nodes: [{
-        nodeType: "postgres13",
+        nodeType: "postgres14",
         flexibleCloudlets: 24,
         fixedCloudlets: 12,
         diskLimit: 50,
@@ -30,7 +30,7 @@ if (${settings.onlyoff:true}) {
         displayName: "Document Services"
     })
     resp.nodes.push({
-        nodeType: "apache2",
+        image: "nextcloud:production-apache",
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
         diskLimit: 30,
@@ -46,11 +46,10 @@ if (${settings.onlyoff:true}) {
 else 
 {
     resp.nodes.push({
-        nodeType: "apache2",
+        image: "nextcloud:production-apache",
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
-        diskLimit: 30,
-        engine: "php7.4",
+        diskLimit: 100,
         nodeGroup: "cp",
         displayName: "Apps",
     })
@@ -58,7 +57,7 @@ else
 
 if (${settings.elastic:true}) {
     resp.nodes.push({
-        image: "elasticsearch:6.8.18",
+        image: "elasticsearch:7.17.5",
         count: 1,
         flexibleCloudlets: 16,
         fixedCloudlets: 1,

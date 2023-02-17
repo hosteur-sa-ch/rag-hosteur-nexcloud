@@ -26,22 +26,10 @@ globals:
   nextcloudroot: /var/www/html
   DB_ADMIN_PASS: "${fn.password}"
   ADMIN_PASS: "${fn.password}"
-  BUCKETNAME: "nxtclddata-${fn.random}"
   PATH: ${baseUrl}
 
 settings:
   fields:
-    - type: string
-      name: s3ak
-      required: true
-      caption: Hosteur S3 Account Key
-      placeholder: Your Hosteur S3 AK
-    - type: string
-      required: true
-      inputType: password
-      name: s3sk
-      caption: Hosteur S3 Secret Key
-      placeholder: Your Hosteur S3 SK
     - type: checkbox
       caption: Install GroupWare Applications
       name: advfeat
@@ -61,7 +49,7 @@ settings:
       disabled: false
       tooltip: Preinstalled OnlyOffice Document server for online multi-editing features.
              
-onBeforeInstall: /scripts/nodedefine.js?_r=${fn.random}
+onBeforeInstall: /scripts/nodedefineenc.js?_r=${fn.random}
 
 
 nodes: definedInOnBeforeInstall
@@ -73,6 +61,7 @@ onInstall:
   - pgsql-createdb
   - nexcloud-db-install
   - nexcloud-storage-install
+  - nexcloud-encryption-install
   - if (${settings.onlyoff:true}):
     - nexcloud-onlyoffice-install
   - if (${settings.elastic:true}):
@@ -103,17 +92,6 @@ actions:
   nexcloud-storage-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments bucket --value="${globals.BUCKETNAME}" --type=string
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments autocreate --value="true" --type=boolean
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments key --value="${settings.s3ak}" --type=string
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments secret --value="${settings.s3sk}" --type=string
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments hostname --value="s3.hosteur.io" --type=string
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments port --value="443" --type=integer
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments use_ssl --value="true" --type=boolean
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments region --value="defaultRegion" --type=string
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore arguments verify_ssl --value="false" --type=boolean
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:set objectstore class --value="\\OC\\Files\\ObjectStore\\S3" --type=string
-      sudo -u www-data php -d  memory_limit=2048M occ config:system:delete datadirectory
       sudo -u www-data php -d  memory_limit=2048M occ config:system:set redis host --value="${nodes.nosqldb.master.address}" --type=string
       sudo -u www-data php -d  memory_limit=2048M occ config:system:set redis port --value="6379" --type=integer
       sudo -u www-data php -d  memory_limit=2048M occ config:system:set redis dbindex --value="0" --type=integer
@@ -132,6 +110,18 @@ actions:
       export OC_PASS=${globals.ADMIN_PASS}
       su -s /bin/sh www-data -c 'php -d  memory_limit=2048M occ user:add --password-from-env --display-name="Super Admin" nxtadmin --group="admin"'
       sudo -u www-data php -d  memory_limit=2048M occ background:cron
+
+  nexcloud-encryption-install:
+    cmd[cp]: |-
+      cd ${globals.nextcloudroot}
+      mkdir -p data/keys
+      chown -R root:www-data data/keys
+      chmod -R 0770 data/keys
+      sudo -u www-data php -d  memory_limit=2048M occ occ encryption:enable
+      sudo -u www-data php -d  memory_limit=2048M occ encryption:set-default-module OC_DEFAULT_MODULE
+      sudo -u www-data php -d  memory_limit=2048M occ encryption:change-key-storage-root keys
+      sudo -u www-data php -d  memory_limit=2048M occ occ encryption:encrypt-all -q
+      
 
   install-cron:
     writeFile:
