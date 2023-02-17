@@ -114,13 +114,9 @@ actions:
   nexcloud-encryption-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}
-      mkdir -p data/keys
-      chown -R root:www-data data/keys
-      chmod -R 0770 data/keys
-      sudo -u www-data php -d  memory_limit=2048M occ occ encryption:enable
-      sudo -u www-data php -d  memory_limit=2048M occ encryption:set-default-module OC_DEFAULT_MODULE
-      sudo -u www-data php -d  memory_limit=2048M occ encryption:change-key-storage-root keys
-      sudo -u www-data php -d  memory_limit=2048M occ occ encryption:encrypt-all -q
+      sudo -u www-data php -d  memory_limit=2048M occ app:enable encryption
+      sudo -u www-data php -d  memory_limit=2048M occ encryption:enable
+      sudo -u www-data php -d  memory_limit=2048M occ encryption:encrypt-all -q
       
 
   install-cron:
