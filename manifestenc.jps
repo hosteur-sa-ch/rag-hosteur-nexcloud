@@ -115,9 +115,8 @@ actions:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}
       sudo -u www-data php -d  memory_limit=2048M occ app:enable encryption -q
+      sudo -u www-data php -d  memory_limit=2048M occ encryption:enable -q
       sudo -u www-data php -d  memory_limit=2048M occ encryption:encrypt-all -q
-    sayYes: true
-      
 
   install-cron:
     writeFile:
