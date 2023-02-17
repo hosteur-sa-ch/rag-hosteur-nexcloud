@@ -1,4 +1,4 @@
-Nextcloud with Hosteur Bucket Storage.
+Nextcloud with Hosteur Bucket Storage Or Encrypted Local Storage.
 
 >No Hosteur Bucket Account yet ...
 >Go to [Hosteur](https://www.hosteur.com/business/stockage/bucket) to create your account.

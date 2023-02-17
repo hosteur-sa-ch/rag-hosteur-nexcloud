@@ -2,7 +2,7 @@ version: '1.25.3'
 appVersion: latest
 type: install
 id: hstnextcloud
-name: Hosteur NextCloud (Bucket Storage)
+name: Hosteur NextCloud (Local Encryted Storage)
 baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
 logo: /images/logo.png
 homepage: http://www.nextcloud.com/
@@ -115,7 +115,6 @@ actions:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}
       sudo -u www-data php -d  memory_limit=2048M occ app:enable encryption
-      sudo -u www-data php -d  memory_limit=2048M occ encryption:enable
       sudo -u www-data php -d  memory_limit=2048M occ encryption:encrypt-all -q
       
 

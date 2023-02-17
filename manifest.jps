@@ -137,7 +137,7 @@ actions:
     writeFile:
       nodeGroup: cp
       path: "/var/spool/cron/crontabs/root"
-      body: "*/5 * * * * sudo -u www-data php -d  memory_limit=2048M -f /var/www/html/cron.php"
+      body: "*/5 * * * * sudo -u www-data php -d memory_limit=2048M -f /var/www/html/cron.php"
 
   nexcloud-app-install:
     cmd[cp]: |-
