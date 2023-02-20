@@ -1,7 +1,7 @@
 version: '1.25.3'
 appVersion: latest
 type: install
-id: hstnextcloud
+id: hstnextcloudenc
 name: Hosteur NextCloud (Local Encryted Storage)
 baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
 logo: /images/logoenc.png
