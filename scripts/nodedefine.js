@@ -21,7 +21,7 @@ var resp = {
 
 if (${settings.onlyoff:true}) {
     resp.nodes.push({
-        image: "onlyoffice/documentserver:6.4.1",
+        image: "onlyoffice/documentserver:7.3",
         count: 1,
         flexibleCloudlets: 16,
         fixedCloudlets: 1,

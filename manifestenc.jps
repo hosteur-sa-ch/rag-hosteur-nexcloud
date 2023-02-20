@@ -114,9 +114,10 @@ actions:
   nexcloud-encryption-install:
     cmd[cp]: |-
       cd ${globals.nextcloudroot}
-      sudo -u www-data php -d  memory_limit=2048M occ app:enable encryption -q
-      sudo -u www-data php -d  memory_limit=2048M occ encryption:enable -q
-      sudo -u www-data php -d  memory_limit=2048M occ encryption:encrypt-all -q
+      sudo -u www-data php -d  memory_limit=2048M occ app:enable encryption
+      sudo -u www-data php -d  memory_limit=2048M occ encryption:enable
+      sudo -u www-data php -d  memory_limit=2048M occ encryption:status
+      tar -czvf /root/masterkey_backup.tar.gz /var/www/html/data/files_encryption/OC_DEFAULT_MODULE
 
   install-cron:
     writeFile:
@@ -157,6 +158,9 @@ success:
     **User**: nxtadmin
 
     **Password**: ${globals.ADMIN_PASS}
+
+    **!!Please download the file /root/masterkey_backup.tar.gz on Apps Node, to keep safe your encryption Key!!**
+
   text: |
     **NextCloud Admin**
 
@@ -165,3 +169,5 @@ success:
     **User**: nxtadmin
 
     **Password**: ${globals.ADMIN_PASS}
+
+    **!!Please download the file /root/masterkey_backup.tar.gz on Apps Node, to keep safe your encryption Key!!**
