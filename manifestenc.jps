@@ -159,7 +159,7 @@ success:
 
     **Password**: ${globals.ADMIN_PASS}
 
-    **!!Please download the file /root/masterkey_backup.tar.gz on Apps Node, to keep safe your encryption Key!!**
+    **!! Please download the file /root/masterkey_backup.tar.gz on Apps Node, to keep safe your encryption Key !!**
 
   text: |
     **NextCloud Admin**
@@ -170,4 +170,4 @@ success:
 
     **Password**: ${globals.ADMIN_PASS}
 
-    **!!Please download the file /root/masterkey_backup.tar.gz on Apps Node, to keep safe your encryption Key!!**
+    **!! Please download the file /root/masterkey_backup.tar.gz on Apps Node, to keep safe your encryption Key !!**
