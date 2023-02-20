@@ -4,7 +4,7 @@ type: install
 id: hstnextcloud
 name: Hosteur NextCloud (Local Encryted Storage)
 baseUrl: https://raw.githubusercontent.com/hosteur-sa-ch/rag-hosteur-nexcloud/main
-logo: /images/logo.png
+logo: /images/logoenc.png
 homepage: http://www.nextcloud.com/
 ssl: true
 skipNodeEmails: true
