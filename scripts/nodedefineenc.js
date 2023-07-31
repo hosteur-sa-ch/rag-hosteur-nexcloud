@@ -30,7 +30,7 @@ if (${settings.onlyoff:true}) {
         displayName: "Document Services"
     })
     resp.nodes.push({
-        image: "nextcloud:production-apache",
+        image: "nextcloud:24.0.12-apache",
         flexibleCloudlets: 16,
         fixedCloudlets: 1,
         diskLimit: 30,
